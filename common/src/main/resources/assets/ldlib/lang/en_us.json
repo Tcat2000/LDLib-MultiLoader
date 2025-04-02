@@ -283,5 +283,8 @@
   "ldlib.gui.editor.dragging_position": "dragging position",
   "ldlib.gui.editor.dragging_size": "dragging size",
   "ldlib.gui.editor.add_widget": "add widget (%s)",
-  "ldlib.gui.editor.move_widget": "move widget (%s)"
+  "ldlib.gui.editor.move_widget": "move widget (%s)",
+
+  "model_renderer.force_tesr": "Force TESR",
+  "model_renderer.force_tesr.tooltip": "Should force TESR Enabled. Use for custom render logic on machine not otherwise needing TESR."
 }

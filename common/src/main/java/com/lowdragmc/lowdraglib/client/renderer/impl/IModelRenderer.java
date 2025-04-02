@@ -49,6 +49,9 @@ public class IModelRenderer implements ISerializableRenderer {
     @Configurable(forceUpdate = false)
     protected ResourceLocation modelLocation;
 
+    @Configurable(name = "model_renderer.force_tesr", tips = {"model_renderer.force_tesr.tooltip"})
+    public boolean forceTESR = false;
+
     @Environment(EnvType.CLIENT)
     protected BakedModel itemModel;
 
@@ -237,8 +240,6 @@ public class IModelRenderer implements ISerializableRenderer {
             if (modelCaches != null) modelCaches.clear();
         }
     }
-    @Configurable( name = "IModelRenderer.forceTESR")
-    public boolean forceTESR = false;
 
     @Environment(EnvType.CLIENT)
     public void updateModelWithReloadingResource(ResourceLocation modelLocation) {
