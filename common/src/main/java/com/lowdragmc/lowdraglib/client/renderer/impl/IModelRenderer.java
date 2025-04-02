@@ -33,6 +33,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockAndTintGetter;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 
 import javax.annotation.Nonnull;
@@ -236,6 +237,8 @@ public class IModelRenderer implements ISerializableRenderer {
             if (modelCaches != null) modelCaches.clear();
         }
     }
+    @Configurable( name = "IModelRenderer.forceTESR")
+    public boolean forceTESR = false;
 
     @Environment(EnvType.CLIENT)
     public void updateModelWithReloadingResource(ResourceLocation modelLocation) {
@@ -273,5 +276,10 @@ public class IModelRenderer implements ISerializableRenderer {
     private static ResourceLocation getModelFromFile(File path, File r){
         var id = path.getPath().replace('\\', '/').split("assets/")[1].split("/")[0];
         return new ResourceLocation(id, r.getPath().replace(path.getPath(), "").replace(".json", "").replace('\\', '/').substring(1));
+    }
+
+    @Override
+    public boolean hasTESR(BlockEntity blockEntity) {
+        return forceTESR;
     }
 }
