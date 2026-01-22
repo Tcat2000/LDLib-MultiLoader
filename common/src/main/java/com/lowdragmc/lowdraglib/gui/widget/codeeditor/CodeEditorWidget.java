@@ -37,6 +37,9 @@ public class CodeEditorWidget extends WidgetGroup {
     protected IGuiTexture yBarF = ColorPattern.T_GRAY.rectTexture().setRadius(2);
     @Setter
     protected Consumer<List<String>> onTextChanged;
+    @Setter
+    @Getter
+    protected ResourceLocation codeFont = MONO_BOLD;
 
     // runtime
     private boolean isHoveringXBar;
@@ -84,7 +87,7 @@ public class CodeEditorWidget extends WidgetGroup {
         var visibleLines = codeEditor.getVisibleStyledLines();
         var line = Mth.clamp((int) Math.floor(y / lineHeight), 0, visibleLines.size() - 1);
         var visibleLine = visibleLines.get(line);
-        var width = visibleLine.getWidth(font, Style.EMPTY.withFont(MONO_BOLD));
+        var width = visibleLine.getWidth(font, Style.EMPTY.withFont(codeFont));
         var column = Math.min(1, x / width) * codeEditor.getDocument().getLine(visibleLine.line()).length() + 0.5;
         return new Cursor(visibleLines.get(line).line(), (int) column);
     }
@@ -128,7 +131,7 @@ public class CodeEditorWidget extends WidgetGroup {
             var visibleLines = codeEditor.getVisibleStyledLines();
 
             var fullHeight = lineHeight * visibleLines.size();
-            int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(MONO_BOLD))).max(Integer::compareTo).orElse(0) + 3;
+            int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(codeFont))).max(Integer::compareTo).orElse(0) + 3;
             var hasXBar = fullWidth > size.width;
             var availableHeight = size.height - (hasXBar ? 4 : 0);
             var hasYBar = fullHeight > availableHeight;
@@ -247,7 +250,7 @@ public class CodeEditorWidget extends WidgetGroup {
         var visibleLines = codeEditor.getVisibleStyledLines();
 
         var fullHeight = lineHeight * visibleLines.size();
-        int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(MONO_BOLD))).max(Integer::compareTo).orElse(0) + 3;
+        int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(codeFont))).max(Integer::compareTo).orElse(0) + 3;
         var hasXBar = fullWidth > size.width;
         var availableHeight = size.height - (hasXBar ? 4 : 0);
         var hasYBar = fullHeight > availableHeight;
@@ -259,7 +262,7 @@ public class CodeEditorWidget extends WidgetGroup {
             if (visibleLine.line() == cursorPos.line()) {
                 // found
                 var cursorX = font.width(Component.literal(codeEditor.getDocument().getLine(cursorPos.line()).substring(0, cursorPos.column()))
-                        .withStyle(Style.EMPTY.withFont(MONO_BOLD))) - 1  + xOffset + pos.x - scrollXOffset;
+                        .withStyle(Style.EMPTY.withFont(codeFont))) - 1  + xOffset + pos.x - scrollXOffset;
                 if (cursorX < pos.x) {
                     scrollXOffset += (cursorX - pos.x);
                 } else if (cursorX > pos.x + availableWidth - 2) {
@@ -313,7 +316,7 @@ public class CodeEditorWidget extends WidgetGroup {
             var visibleLines = codeEditor.getVisibleStyledLines();
 
             var fullHeight = lineHeight * visibleLines.size();
-            int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(MONO_BOLD))).max(Integer::compareTo).orElse(0) + 3;
+            int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(codeFont))).max(Integer::compareTo).orElse(0) + 3;
             var hasXBar = fullWidth > size.width;
             var availableHeight = size.height - (hasXBar ? 4 : 0);
             var hasYBar = fullHeight > availableHeight;
@@ -351,7 +354,7 @@ public class CodeEditorWidget extends WidgetGroup {
 
         // scroll bar
         var fullHeight = lineHeight * visibleLines.size();
-        int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(MONO_BOLD))).max(Integer::compareTo).orElse(0) + 3;
+        int fullWidth = visibleLines.stream().map(styledLine -> styledLine.getWidth(font, Style.EMPTY.withFont(codeFont))).max(Integer::compareTo).orElse(0) + 3;
         var hasXBar = fullWidth > size.width;
         var availableHeight = size.height - (hasXBar ? 4 : 0);
         var hasYBar = fullHeight > availableHeight;
@@ -406,10 +409,10 @@ public class CodeEditorWidget extends WidgetGroup {
                         break;
                     }
                     var start = line == range[0] ? font.width(Component.literal(codeEditor.getDocument().getLine(line).substring(0, range[1]))
-                            .withStyle(Style.EMPTY.withFont(MONO_BOLD))) - 1 : 0;
+                            .withStyle(Style.EMPTY.withFont(codeFont))) - 1 : 0;
                     var end = line == range[2] ? font.width(Component.literal(codeEditor.getDocument().getLine(line).substring(0, range[3]))
-                            .withStyle(Style.EMPTY.withFont(MONO_BOLD))) - 1 : font.width(Component.literal(codeEditor.getDocument().getLine(line))
-                        .withStyle(Style.EMPTY.withFont(MONO_BOLD))) - 1;
+                            .withStyle(Style.EMPTY.withFont(codeFont))) - 1 : font.width(Component.literal(codeEditor.getDocument().getLine(line))
+                        .withStyle(Style.EMPTY.withFont(codeFont))) - 1;
                     graphics.fill(pos.x + start + xOffset,
                             pos.y + i * lineHeight + yOffset - 2,
                             pos.x + end + xOffset,
@@ -423,7 +426,7 @@ public class CodeEditorWidget extends WidgetGroup {
             for (var styledLine : visibleLines) {
                 var x = 0;
                 for (var styledText : styledLine.text()) {
-                    var literal = Component.literal(styledText.getText()).withStyle(styledText.getStyle().withFont(MONO_BOLD));
+                    var literal = Component.literal(styledText.getText()).withStyle(styledText.getStyle().withFont(codeFont));
                     graphics.drawString(font, literal, pos.x + x + xOffset - 1, pos.y + y + yOffset, -1, false);
                     x += font.width(literal) - 1;
                 }
@@ -438,7 +441,7 @@ public class CodeEditorWidget extends WidgetGroup {
                 if (visibleLine.line() == cursorPos.line()) {
                     // found
                     var cursorX = font.width(Component.literal(codeEditor.getDocument().getLine(cursorPos.line()).substring(0, cursorPos.column()))
-                            .withStyle(Style.EMPTY.withFont(MONO_BOLD))) - 1;
+                            .withStyle(Style.EMPTY.withFont(codeFont))) - 1;
                     graphics.fill(pos.x + cursorX + xOffset,
                             pos.y + cursorPos.line() * lineHeight + yOffset - 2,
                             pos.x + cursorX + 1 + xOffset,
